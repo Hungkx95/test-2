@@ -1,2 +1,27 @@
 https://github.com/ptduyit/websitebanhang.git
 https://github.com/minh167446/AmazonClientV1
+    public IActionResult testSQL()
+    {     
+        DateTime a = new DateTime(2008, 5, 1, 8, 30, 52);
+        var sql = (from w in _context.WorkOn
+                   join e in _context.Employee on w.EmpId equals e.EmpId
+                   join d in _context.Department on w.DeptId equals d.DeptId
+                   where e.EmpId == 11 && e.DateOfBirth <= a
+                   group e by new
+                   {
+                       e.EmpId,
+                       e.EmpName,
+                       d.DeptId,
+                       d.DeptName
+                   } into g
+                   select new
+                   {
+                       g.Key.EmpId,
+                       g.Key.DeptId,
+                       g.Key.DeptName,
+                       g.Key.EmpName,
+                       sum = g.Sum(s => g.Key.EmpId)
+                   });                       
+                   
+        return Ok(sql);
+    }
